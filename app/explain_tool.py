@@ -1,5 +1,10 @@
 from app.model_interface import ModelInterface
 from app.cobol_parser import parse_cobol_paragraphs
+import re
+
+def clean_llm_output(text):
+    # Remove  and similar tokens
+    return re.sub(r"|<\|im_start\|>|<\|im_end\|>", "", text, flags=re.IGNORECASE).strip()
 
 def explain_cobol_code(cobol_code: str, model_name=None, max_paragraphs=5):
     """
@@ -17,6 +22,7 @@ def explain_cobol_code(cobol_code: str, model_name=None, max_paragraphs=5):
         )
         try:
             explanation = model.generate(prompt)
+            explanation = clean_llm_output(explanation)
         except Exception as e:
             explanation = f"Error from LLM: {e}"
         yield i + 1, total, para["name"], explanation
