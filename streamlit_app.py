@@ -1,7 +1,7 @@
 import streamlit as st
 from app.model_interface import ModelInterface
 from app.explain_tool import explain_cobol_code
-from app.translate_tool import translate_cobol_code, translate_full_cobol_program, translate_full_cobol_program_with_modularity
+from app.translate_tool import translate_cobol_code, translate_full_cobol_program_with_modularity
 from app.business_logic_extractor import extract_business_logic_and_modular_design
 
 
@@ -99,6 +99,19 @@ if st.button("Translate Full Program (Modular)"):
         st.warning("Please upload or paste COBOL code.")
     else:
         st.info(f"Translating full COBOL program to {target_lang} with modular design, please wait...")
-        translation = translate_full_cobol_program_with_modularity(cobol_code, target_lang, model_name=model_name)
+        result = translate_full_cobol_program_with_modularity(cobol_code, target_lang, model_name=model_name)
+
+        # Display metadata
+        st.subheader("Translation Metadata")
+        st.json(result["metadata"])
+
+        # Display translation
         st.subheader(f"Full Program Translation ({target_lang}, Modular)")
-        st.code(translation, language=target_lang.lower())
+        if "error" in result:
+            st.error(result["error"])
+        else:
+            st.code(result["output"], language=target_lang.lower())
+
+        # Display modular design
+        st.subheader("Modular Design")
+        st.markdown(result["modular_design"])

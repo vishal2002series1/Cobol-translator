@@ -29,5 +29,5 @@ Built with Streamlit, LangChain, and Ollama (using `deepseek-r1:1.5b`), with LLM
 ### 2. Clone and Setup
 
 ```sh
-git clone https://github.com/your-username/cobol-translator.git
+git clone https://github.com/vishal2002series1/Cobol-translator.git
 cd cobol-translator
