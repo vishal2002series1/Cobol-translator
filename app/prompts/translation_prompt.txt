@@ -1,0 +1,6 @@
+You are an expert software engineer.
+Translate the following COBOL paragraph into {target_lang} code.
+Preserve the logic and variable names as much as possible.
+Add comments to explain the code.
+COBOL CODE:
+{cobol_code}

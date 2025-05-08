@@ -28,6 +28,12 @@ COBOL CODE:
 {cobol_code}
 """
 
+def load_prompt(filepath):
+    with open(filepath, "r") as f:
+        return f.read()
+
+BUSINESS_LOGIC_PROMPT = load_prompt("app/prompts/business_logic_extraction.txt")
+
 def clean_llm_output(text):
     # Remove  and similar tokens
     # return re.sub(r"|<\|im_start\|>|<\|im_end\|>", "", text, flags=re.IGNORECASE).strip()
@@ -39,7 +45,8 @@ def translate_cobol_code(cobol_code: str, target_lang: str, model_name=None, max
     total = min(len(paragraphs), max_paragraphs)
     translations = []
     for i, para in enumerate(paragraphs[:max_paragraphs]):
-        prompt = TRANSLATION_PROMPT.format(target_lang=target_lang, cobol_code=para["text"])
+        # prompt = TRANSLATION_PROMPT.format(target_lang=target_lang, cobol_code=para["text"])
+        prompt = load_prompt("app/prompts/translation_prompt.txt").format(target_lang=target_lang, cobol_code=para["text"])
         try:
             translation = model.generate(prompt)
             translation = clean_llm_output(translation)
@@ -50,7 +57,8 @@ def translate_cobol_code(cobol_code: str, target_lang: str, model_name=None, max
 
 def translate_full_cobol_program(cobol_code: str, target_lang: str, model_name=None):
     model = ModelInterface(model_name=model_name)
-    prompt = FULL_PROGRAM_PROMPT.format(target_lang=target_lang, cobol_code=cobol_code[:8000])
+    # prompt = FULL_PROGRAM_PROMPT.format(target_lang=target_lang, cobol_code=cobol_code[:8000])
+    prompt = load_prompt("app/prompts/translate_full_program.txt").format(target_lang=target_lang, cobol_code=cobol_code[:8000])
     try:
         translation = model.generate(prompt)
         translation = clean_llm_output(translation)
@@ -61,16 +69,17 @@ def translate_full_cobol_program(cobol_code: str, target_lang: str, model_name=N
 def translate_full_cobol_program_with_modularity(cobol_code: str, target_lang: str, model_name=None):
     modular_design = extract_business_logic_and_modular_design(cobol_code, model_name=model_name)
     model = ModelInterface(model_name=model_name)
-    prompt = f"""
-    You are an expert developer.
-    Using the following modular design and COBOL code, generate a modern, modular {target_lang} code file.
-    Modular Design:
-    {modular_design}
+    # prompt = f"""
+    # You are an expert developer.
+    # Using the following modular design and COBOL code, generate a modern, modular {target_lang} code file.
+    # Modular Design:
+    # {modular_design}
 
-    - Once you have generated all the codes. Once again write a complete code and put your final code in between <Final Code> </Final Code> xml tags.
-    COBOL CODE:
-    {cobol_code[:8000]}
-    """
+    # - Once you have generated all the codes. Once again write a complete code and put your final code in between <Final Code> </Final Code> xml tags.
+    # COBOL CODE:
+    # {cobol_code[:8000]}
+    # """
+    prompt = load_prompt("app/prompts/translate_with_modularity.txt").format(target_lang=target_lang,modular_design=modular_design,cobol_code=cobol_code[:8000])
     try:
         translation = model.generate(prompt)
     except Exception as e:
