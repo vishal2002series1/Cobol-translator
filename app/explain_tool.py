@@ -4,7 +4,8 @@ import re
 
 def clean_llm_output(text):
     # Remove  and similar tokens
-    return re.sub(r"|<\|im_start\|>|<\|im_end\|>", "", text, flags=re.IGNORECASE).strip()
+    # return re.sub(r"|<\|im_start\|>|<\|im_end\|>", "", text, flags=re.IGNORECASE).strip()
+    return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL | re.IGNORECASE).strip()
 
 def explain_cobol_code(cobol_code: str, model_name=None, max_paragraphs=5):
     """
