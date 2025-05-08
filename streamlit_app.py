@@ -1,6 +1,7 @@
 import streamlit as st
 from app.model_interface import ModelInterface
 from app.explain_tool import explain_cobol_code
+from app.translate_tool import translate_cobol_code, translate_full_cobol_program
 
 st.set_page_config(page_title="COBOL Translator", layout="wide")
 
@@ -51,3 +52,34 @@ if st.button("Explain Only"):
             debug_area.empty()
         except Exception as e:
             st.error(f"Error during explanation: {e}")
+
+if st.button("Translate Only"):
+    if not cobol_code.strip():
+        st.warning("Please upload or paste COBOL code.")
+    else:
+        st.info(f"Translating COBOL code to {target_lang}, please wait...")
+        translations = []
+        progress_bar = st.progress(0)
+        debug_area = st.empty()
+        try:
+            for i, total, name, translation in translate_cobol_code(
+                cobol_code, target_lang, model_name=model_name, max_paragraphs=5
+            ):
+                progress_bar.progress(i / total)
+                st.subheader(name)
+                st.code(translation, language=target_lang.lower())
+                translations.append({"name": name, "translation": translation})
+                debug_area.info(f"Translated {i} of {total} paragraphs...")
+            progress_bar.empty()
+            debug_area.empty()
+        except Exception as e:
+            st.error(f"Error during translation: {e}")
+
+if st.button("Translate Full Program"):
+    if not cobol_code.strip():
+        st.warning("Please upload or paste COBOL code.")
+    else:
+        st.info(f"Translating full COBOL program to {target_lang}, please wait...")
+        translation = translate_full_cobol_program(cobol_code, target_lang, model_name=model_name)
+        st.subheader(f"Full Program Translation ({target_lang})")
+        st.code(translation, language=target_lang.lower())
