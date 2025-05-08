@@ -16,20 +16,25 @@ COBOL CODE:
 
 def llm_parse_cobol_paragraphs(cobol_code: str, model_name=None):
     model = ModelInterface(model_name=model_name)
-    prompt = LLM_PARSER_PROMPT.format(cobol_code=cobol_code[:8000])  # Truncate if needed
+    prompt = LLM_PARSER_PROMPT.format(cobol_code=cobol_code[:8000])
     response = model.generate(prompt)
-    # Try to extract JSON from the response
+    print("LLM raw response:\n", response)  # For debugging
     try:
-        # Find the first '[' and last ']' to extract JSON array
+        # Try to extract the JSON array from the response
         start = response.find('[')
         end = response.rfind(']')
+        if start == -1 or end == -1:
+            raise ValueError("No JSON array found in LLM response.")
         json_str = response[start:end+1]
         paragraphs = json.loads(json_str)
-        # Ensure each item has 'name' and 'code'
-        return [
-            {"name": p["name"].strip(), "text": p["code"].strip()}
-            for p in paragraphs if "name" in p and "code" in p
-        ]
+        # Only keep items that are dicts and have both 'name' and 'code'
+        clean_paragraphs = []
+        for p in paragraphs:
+            if isinstance(p, dict) and "name" in p and "code" in p:
+                clean_paragraphs.append({"name": p["name"].strip(), "text": p["code"].strip()})
+        if not clean_paragraphs:
+            raise ValueError("No valid paragraphs found in LLM output.")
+        return clean_paragraphs
     except Exception as e:
         print(f"LLM parsing failed: {e}\nResponse was:\n{response}")
         return []
