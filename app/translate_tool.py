@@ -79,7 +79,7 @@ def translate_full_cobol_program_with_modularity(cobol_code: str, target_lang: s
     # COBOL CODE:
     # {cobol_code[:8000]}
     # """
-    prompt = load_prompt("app/prompts/translate_with_modularity.txt").format(target_lang=target_lang,modular_design=modular_design,cobol_code=cobol_code[:8000])
+    prompt = load_prompt("app/prompts/translate_with_modularity.txt").format(target_lang=target_lang,modular_design=modular_design,cobol_code=cobol_code)
     try:
         translation = model.generate(prompt)
     except Exception as e:
