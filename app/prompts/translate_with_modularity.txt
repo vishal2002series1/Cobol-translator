@@ -1,8 +1,46 @@
-You are an expert developer.
-    Using the following modular design and COBOL code, generate a modern, modular {target_lang} code file.
-    Modular Design:
-    {modular_design}
+**Role:** You are an Expert Developer with extensive experience in COBOL to {target_lang} migration, focusing on creating modern, maintainable, and modular applications.
 
-    - Once you have generated all the codes. Once again write a complete code and put your final code in {target_lang} in between <Final Code> </Final Code> xml tags.
-    COBOL CODE:
+**Objective:** Transform the legacy COBOL code provided below into a high-quality, modular {target_lang} application. The transformation must strictly follow the conceptual modular design also provided.
+
+**Key Inputs:**
+1.  **Target Language & Version (if specific):** {target_lang} (e.g., Python 3.10+, Java 17 with Spring Boot (if applicable for design), C# .NET 7)
+2.  **Conceptual Modular Design:**
+    *(This design outlines the desired components, their responsibilities, and interactions in the target language. Focus on translating COBOL paragraphs/sections/programs into these modules.)*
+    ```
+    {modular_design}
+    ```
+3.  **Source COBOL Code:**
+    ```cobol
     {cobol_code}
+    ```
+
+**Transformation & Generation Guidelines:**
+1.  **Adherence to Modular Design:** The generated {target_lang} code must implement the logic from the COBOL code within the structure defined by `{modular_design}`. Map COBOL sections, paragraphs, and data structures to the appropriate modules/classes/functions in `{target_lang}` as per the design.
+2.  **Modern Practices:**
+    * Employ idiomatic `{target_lang}` syntax and features.
+    * Use appropriate modern data structures available in `{target_lang}` (e.g., lists, dictionaries, objects instead of complex COBOL group items where applicable).
+    * Implement clear and consistent naming conventions for variables, functions, classes, etc., in `{target_lang}` style.
+    * Consider basic error handling patterns suitable for `{target_lang}` where implicit in COBOL logic (e.g., file status checks, invalid data).
+3.  **COBOL Logic Translation:**
+    * Accurately translate COBOL business logic, including arithmetic operations, conditional statements (IF, EVALUATE), loops (PERFORM), and data manipulations.
+    * Handle COBOL data types by mapping them to the closest and most appropriate `{target_lang}` types. Pay attention to numeric precision (e.g., COMP-3 fields).
+    * File I/O operations in COBOL (READ, WRITE, OPEN, CLOSE) should be mapped to equivalent `{target_lang}` file handling mechanisms or data access layers as suggested by the modular design.
+4.  **Comments & Readability:**
+    * Translate relevant comments from the COBOL code.
+    * Add new comments in the `{target_lang}` code to explain complex logic, mapping decisions, or assumptions made during the translation.
+5.  **Completeness:** Ensure all functionalities present in the COBOL code, within the scope of the provided snippet, are implemented in the `{target_lang}` code.
+
+**Output Structure:**
+1.  **(Optional but Recommended) Brief Explanation:** Before the final code, you may provide a concise summary (max 2-3 paragraphs) explaining:
+    * How the COBOL program structure was mapped to the `{modular_design}` in `{target_lang}`.
+    * Any significant translation choices, challenges, or assumptions made.
+    * Potential areas for further refinement if the COBOL or design was ambiguous.
+2.  **Final Code Block:** Present the complete, single, and runnable `{target_lang}` code file. This entire code block **must** be enclosed between `<FinalCode>` and `</FinalCode>` XML tags. There should be no other text or explanation within these tags, only the code itself.
+
+**Example of Final Output Formatting:**
+```xml
+<FinalCode>
+// Your generated {target_lang} code starts here
+// ...
+// Your generated {target_lang} code ends here
+</FinalCode>

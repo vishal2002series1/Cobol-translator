@@ -1,0 +1,8 @@
+You are an expert developer.
+    Using the following modular design and COBOL code, generate a modern, modular {target_lang} code file.
+    Modular Design:
+    {modular_design}
+
+    - Once you have generated all the codes. Once again write a complete code and put your final code in {target_lang} in between <Final Code> </Final Code> xml tags.
+    COBOL CODE:
+    {cobol_code}
