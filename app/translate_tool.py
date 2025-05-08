@@ -1,5 +1,6 @@
 from app.model_interface import ModelInterface
 from app.cobol_parser import parse_cobol_paragraphs
+from app.business_logic_extractor import extract_business_logic_and_modular_design
 import re
 
 
@@ -53,6 +54,25 @@ def translate_full_cobol_program(cobol_code: str, target_lang: str, model_name=N
     try:
         translation = model.generate(prompt)
         translation = clean_llm_output(translation)
+    except Exception as e:
+        translation = f"Error from LLM: {e}"
+    return translation
+
+def translate_full_cobol_program_with_modularity(cobol_code: str, target_lang: str, model_name=None):
+    modular_design = extract_business_logic_and_modular_design(cobol_code, model_name=model_name)
+    model = ModelInterface(model_name=model_name)
+    prompt = f"""
+    You are an expert developer.
+    Using the following modular design and COBOL code, generate a modern, modular {target_lang} code file.
+    Modular Design:
+    {modular_design}
+
+    - Once you have generated all the codes. Once again write a complete code and put your final code in between <Final Code> </Final Code> xml tags.
+    COBOL CODE:
+    {cobol_code[:8000]}
+    """
+    try:
+        translation = model.generate(prompt)
     except Exception as e:
         translation = f"Error from LLM: {e}"
     return translation
