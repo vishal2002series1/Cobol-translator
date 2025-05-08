@@ -3,6 +3,6 @@ You are an expert developer.
     Modular Design:
     {modular_design}
 
-    - Once you have generated all the codes. Once again write a complete code and put your final code in between <Final Code> </Final Code> xml tags.
+    - Once you have generated all the codes. Once again write a complete code and put your final code in {target_lang} in between <Final Code> </Final Code> xml tags.
     COBOL CODE:
-    {cobol_code[:8000]}
+    {cobol_code}

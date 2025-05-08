@@ -5,28 +5,28 @@ import re
 
 
 
-TRANSLATION_PROMPT = """
-You are an expert software engineer.
-Translate the following COBOL paragraph into {target_lang} code.
-Preserve the logic and variable names as much as possible.
-Add comments to explain the code.
-COBOL CODE:
-{cobol_code}
-"""
+# TRANSLATION_PROMPT = """
+# You are an expert software engineer.
+# Translate the following COBOL paragraph into {target_lang} code.
+# Preserve the logic and variable names as much as possible.
+# Add comments to explain the code.
+# COBOL CODE:
+# {cobol_code}
+# """
 
-FULL_PROGRAM_PROMPT = """
-You are an expert software engineer.
-Translate the following COBOL program into a single, runnable {target_lang} code file.
-- Each COBOL paragraph should become a function/method.
-- The main entry point should call these functions in the same order as the COBOL program's execution flow.
-- Preserve variable names and logic as much as possible.
-- Add comments to explain the code.
-- Output only the code file, no explanation.
-- Once you have generated all the codes. Once again write a complete code and put your final code in between <Final Code> </Final Code>.
+# FULL_PROGRAM_PROMPT = """
+# You are an expert software engineer.
+# Translate the following COBOL program into a single, runnable {target_lang} code file.
+# - Each COBOL paragraph should become a function/method.
+# - The main entry point should call these functions in the same order as the COBOL program's execution flow.
+# - Preserve variable names and logic as much as possible.
+# - Add comments to explain the code.
+# - Output only the code file, no explanation.
+# - Once you have generated all the codes. Once again write a complete code and put your final code in between <Final Code> </Final Code>.
 
-COBOL CODE:
-{cobol_code}
-"""
+# COBOL CODE:
+# {cobol_code}
+# """
 
 def load_prompt(filepath):
     with open(filepath, "r") as f:
@@ -79,7 +79,7 @@ def translate_full_cobol_program_with_modularity(cobol_code: str, target_lang: s
     # COBOL CODE:
     # {cobol_code[:8000]}
     # """
-    prompt = load_prompt("app/prompts/translate_with_modularity.txt").format(target_lang=target_lang,modular_design=modular_design,cobol_code=cobol_code)
+    prompt = load_prompt("app/prompts/translate_with_modularity.txt").format(target_lang=target_lang,modular_design=modular_design,cobol_code=cobol_code[:8000])
     try:
         translation = model.generate(prompt)
     except Exception as e:
